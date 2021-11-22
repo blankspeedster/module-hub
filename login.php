@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PharmaClique - Login</title>
+    <title>Module Hub - Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -73,7 +73,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">PharmaClique -  <?php echo date("Y"); ?></h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Module Hub -  <?php echo date("Y"); ?></h1>
                                     </div>
                                     <form class="user" method="post" action="process_registration.php">
                                         <div class="form-group">
@@ -99,9 +99,9 @@
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.php">Forgot Password?</a>
                                     </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.php">Create an Account!</a>
-                                    </div>
+<!--                                    <div class="text-center">-->
+<!--                                        <a class="small" href="register.php">Create an Account!</a>-->
+<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>

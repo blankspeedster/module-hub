@@ -13,7 +13,7 @@
     ON r.id = u.role");
 ?>
 
-<title>PharmaClique - Users</title>
+<title>Module Hub - Users</title>
 <head>
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -130,10 +130,9 @@
                                                 <?php } else { ?>
                                                 <select name="role" class="form-control" required>
                                                     <option value="" disabled selected>Role:</option>
-                                                    <option value="1">Customer</option>
-                                                    <option value="2">Rider</option>
-                                                    <option value="3">Pharmacist</option>
-                                                    <option value="4">Admin</option>
+                                                    <option value="1">Admin</option>
+                                                    <option value="2">Student</option>
+                                                    <option value="3">Teacher</option>
                                                 </select>
                                                 <?php } ?>
                                             </div>

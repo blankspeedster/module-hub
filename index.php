@@ -6,7 +6,7 @@
     include("head.php");
 ?>
 
-<title>PharmaClique - Home</title>
+<title>Module Hub - Home</title>
 
 <body id="page-top">
 
@@ -343,7 +343,7 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
+                                    <p>Module Hub makes extensive use of Bootstrap 4 utility classes in order to reduce
                                         CSS bloat and poor page performance. Custom CSS classes are used to create
                                         custom components and custom utility classes.</p>
                                     <p class="mb-0">Before working with this theme, you should become familiar with the

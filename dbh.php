@@ -8,7 +8,7 @@
     $host = 'localhost';
     $username = 'root';
     $password = '';
-    $database = 'pharmaclique_database';
+    $database = 'modulehub_database';
 
     $mysqli = new mysqli($host,$username,$password,$database) or die(mysqli_error($mysqli));
 
