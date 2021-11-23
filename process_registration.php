@@ -23,6 +23,7 @@
                 }
                 else{
                     $_SESSION['email'] = $newCheckUser["email"];
+                    $_SESSION['user_id'] = $newCheckUser["id"];
                     $_SESSION['firstname'] = $newCheckUser["firstname"];
                     $_SESSION['lastname'] = $newCheckUser["lastname"];
                     header("location: index.php");

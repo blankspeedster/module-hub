@@ -7,6 +7,7 @@
     $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     $_SESSION['getURI'] = $getURI;
 
+    $session_user_id = $_SESSION['user_id'];
     $users = mysqli_query($mysqli, "SELECT *, u.id AS user_id
     FROM users u
     JOIN role r
@@ -234,7 +235,7 @@
                                                 <a href="users.php?edit=<?php echo $user['user_id']; ?>" class="btn btn-info btn-sm"><i class="far fa-edit"></i> Edit</a>
                                                 <a href="process_users.php?validate=<?php echo $user['user_id']; ?>" class="btn btn-success btn-sm"><i class="far fa-check-square"></i> Validate</a>
                                                 <!-- Start Drop down Delete here -->
-                                                <button class="btn btn-danger btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button class="btn btn-danger btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="<?php if($session_user_id == $user['user_id']){echo 'display: none;';} ?>">
                                                     <i class="far fa-trash-alt"></i> Delete
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton btn-sm">
