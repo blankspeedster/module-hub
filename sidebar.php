@@ -41,6 +41,13 @@
             <span>Users</span></a>
     </li>
 
+    <!-- Nav Item - Users -->
+    <li class="nav-item">
+        <a class="nav-link" href="section.php">
+            <i class="fas fa-pencil-ruler"></i>
+            <span>Section</span></a>
+    </li>    
+
     <!-- Nav Item - Pages Collapse Menu -->
 <!--    <li class="nav-item">-->
 <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"-->
