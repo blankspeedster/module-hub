@@ -128,6 +128,7 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Role
                                             </div>
+                                            <?php if($_SESSION["role"]==1){ ?>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                 <?php if(isset($_GET['edit'])){ ?>
                                                     <input type="text" class="form-control" id="password" name="role" value="<?php if(isset($_GET['edit'])){echo strtoupper($edit_user['code']); } ?>" readonly>
@@ -140,6 +141,11 @@
                                                 </select>
                                                 <?php } ?>
                                             </div>
+                                            <?php } else { ?>
+                                                <select name="role" class="form-control" disabled>
+                                                    <option value="2" disabled selected>Student</option>
+                                                </select>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>

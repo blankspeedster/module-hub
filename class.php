@@ -8,9 +8,10 @@ $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $_SESSION['getURI'] = $getURI;
 
 $session_user_id = $_SESSION['user_id'];
-
+$section_id = 0;
 if (isset($_GET['section'])) {
     $class = $_GET['section'];
+    $section_id = $_GET['section'];
 } else {
     header("location: section.php");
 }
@@ -113,8 +114,9 @@ WHERE section_id = '$class' ");
                             </form>
                         </div>
                     </div>
+
                     <!-- Users Table -->
-                    <div class="card shadow mb-4">
+                    <div class="card shadow mb-4" style="display: none;">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">List of Grade and Sections</h6>
                         </div>
@@ -149,6 +151,54 @@ WHERE section_id = '$class' ");
                             </div>
                         </div>
                     </div>
+
+                    <!-- Section Tables -->
+                    <?php
+                        $subjects = mysqli_query($mysqli, " SELECT * FROM subjects");
+                        while($subject = mysqli_fetch_array($subjects)){
+                    ?>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"><?php echo strtoupper($subject["code"]); ?></h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <td>Student Name</td>
+                                            <td>Status</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $subjectId = $subject['id'];
+                                        $classes = mysqli_query($mysqli, "SELECT * FROM users u
+                                        JOIN class c
+                                        ON c.user_id = u.id
+                                        WHERE section_id = '$section_id' AND subject_id = '$subjectId'
+                                        GROUP BY u.id ");                                        
+                                        while ($class = mysqli_fetch_array($classes)) {
+                                        ?>
+                                            <tr>
+                                                <td><?php echo $class['firstname'] . ' ' . $class['lastname']; ?></td>
+                                                <td>
+                                                    <?php if($class['returned'] == "0"){ ?>
+                                                    <span class="badge bg-danger text-white">For Distribution</span>
+                                                    <?php } else if($class['returned'] == "-1"){ ?>
+                                                    <span class="badge bg-warning text-white">Pending Return</span>
+                                                    <?php } else if($class['returned'] == "1"){ ?>
+                                                    <span class="badge bg-success text-white">Pending Return</span>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
 
                 </div>
                 <!-- /.container-fluid -->
