@@ -188,7 +188,7 @@ WHERE section_id = '$class' ");
                                                     <?php } else if($class['returned'] == "-1"){ ?>
                                                     <span class="badge bg-warning text-white">Pending Return</span>
                                                     <?php } else if($class['returned'] == "1"){ ?>
-                                                    <span class="badge bg-success text-white">Pending Return</span>
+                                                    <span class="badge bg-success text-white">Returned</span>
                                                     <?php } ?>
                                                 </td>
                                             </tr>
