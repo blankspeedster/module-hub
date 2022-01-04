@@ -45,35 +45,19 @@ def decoder(image):
                 print("No user found. Please try again.")
             else:
                 print(str.capitalize(result["firstname"])+" "+str.capitalize(result["lastname"]))
-                mycursor.execute(f'''SELECT *, u.id as user_id FROM class c
-                                JOIN subjects s ON s.id = c.subject_id
-                                JOIN users u ON u.id = c.user_id
-                                WHERE u.id = {currentID} AND returned = -1 ''')
+                mycursor.execute(f''' SELECT * FROM users u
+                                JOIN class c
+                                ON c.user_id = u.id
+                                WHERE c.returned = "0" AND u.id = {currentID}
+                                LIMIT 1 ''')
                 subjects = mycursor.fetchall()
                 if not subjects:
-                    print("All subject(s) has been returned!")
+                    print("Student has received the modules already.")
                 else:
-                    print("Remaining subjects for returning:")
-                    for subject in subjects:
-                        print(str.capitalize(subject["code"]))
-        elif "subject" in barcodeData.keys():
-            print("Subject exists!")
-            subjectID = barcodeData["subject"]
-            updateStatus = f'''UPDATE class SET returned = '1' WHERE subject_id = {subjectID} AND user_id = {currentID} '''
-            mycursor.execute(updateStatus)
-            mydb.commit()
-
-            mycursor.execute(f'''SELECT *, u.id as user_id FROM class c
-                                JOIN subjects s ON s.id = c.subject_id
-                                JOIN users u ON u.id = c.user_id
-                                WHERE u.id = {currentID} AND returned = 0 ''')
-            subjects = mycursor.fetchall()
-            if not subjects:
-                    print("All subject(s) has been returned!")
-            else:
-                print("Remaining subjects for returning:")
-                for subject in subjects:
-                    print(str.capitalize(subject["code"]))
+                    updateStatus = f'''UPDATE class SET returned = '-1' WHERE user_id = {currentID} '''
+                    mycursor.execute(updateStatus)
+                    mydb.commit()
+                    print("Modules has been dispensed. Please tap another QR code for dispensing.")
         else:
             print("Invalid QR code")      
 
