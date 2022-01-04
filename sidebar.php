@@ -26,6 +26,7 @@
             <span>Home</span></a>
     </li>
 
+    <?php if($_SESSION["role"]!="2"){?>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -47,7 +48,7 @@
             <i class="fas fa-pencil-ruler"></i>
             <span>Section</span></a>
     </li>    
-
+    <?php } ?>
     <!-- Nav Item - Pages Collapse Menu -->
 <!--    <li class="nav-item">-->
 <!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"-->

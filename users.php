@@ -12,6 +12,9 @@
     FROM users u
     JOIN role r
     ON r.id = u.role");
+
+    //Get role
+    $role = $_SESSION['role'];
 ?>
 
 <title>Module Hub - Users</title>
@@ -205,7 +208,7 @@
                                             <th>Phone Number</th>
                                             <th>Role</th>
                                             <th>Validated</th>
-                                            <th>Actions</th>
+                                            <th style="display: <?php if($role!=1){echo "none";} ?>">Actions</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -215,7 +218,7 @@
                                             <th>Phone Number</th>
                                             <th>Role</th>
                                             <th>Validated</th>
-                                            <th>Actions</th>
+                                            <th style="display: <?php if($role!=1){echo "none";} ?>">Actions</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -223,17 +226,29 @@
                                             $approved = boolval($user["validated"]);
                                             ?>
                                         <tr>
-                                            <td><?php echo $user["firstname"]." ".$user["lastname"]; ?></td>
+                                            <td>
+                                                <?php if($user["role"] == "2"){ ?>
+                                                <a target="_blank" href="generate_qr.php?student=<?php echo $user["user_id"]."&firstname=".$user["firstname"]."&lastname=".$user["lastname"]; ?>">
+                                                    <?php echo ucfirst($user["firstname"])." ".ucfirst($user["lastname"]); ?>
+                                                </a>
+                                                <?php } else { ?>
+                                                    <?php echo ucfirst($user["firstname"])." ".ucfirst($user["lastname"]); ?>
+                                                <?php } ?>
+                                            </td>
                                             <td><?php echo $user["email"]; ?></td>
                                             <td><?php echo $user["phone_number"]; ?></td>
                                             <td><?php echo ucfirst($user["code"]); ?></td>
                                             <td><?php if($approved){
                                                 ?><span class="badge bg-success text-white">Validated</span><?php
                                                 }else{?> <span class="badge bg-warning text-white">Pending</span> <?php } ?></td>
-                                            <td>
+                                            <td style="display: <?php if($role!=1){echo "none";} ?>">
                                                 <!-- Edit-->
                                                 <a href="users.php?edit=<?php echo $user['user_id']; ?>" class="btn btn-info btn-sm"><i class="far fa-edit"></i> Edit</a>
-                                                <a href="process_users.php?validate=<?php echo $user['user_id']; ?>" class="btn btn-success btn-sm"><i class="far fa-check-square"></i> Validate</a>
+                                                <?php if(!$approved){ ?>
+                                                <a href="process_users.php?validate=<?php echo $user['user_id']; ?>" class="btn btn-success btn-sm">
+                                                    <i class="far fa-check-square"></i> Validate
+                                                </a>
+                                                <?php } ?>
                                                 <!-- Start Drop down Delete here -->
                                                 <button class="btn btn-danger btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="<?php if($session_user_id == $user['user_id']){echo 'display: none;';} ?>">
                                                     <i class="far fa-trash-alt"></i> Delete
