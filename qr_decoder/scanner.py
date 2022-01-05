@@ -66,7 +66,7 @@ def decoder(image):
             mycursor.execute(f'''SELECT *, u.id as user_id FROM class c
                                 JOIN subjects s ON s.id = c.subject_id
                                 JOIN users u ON u.id = c.user_id
-                                WHERE u.id = {currentID} AND returned = 0 ''')
+                                WHERE u.id = {currentID} AND returned = -1 ''')
             subjects = mycursor.fetchall()
             if not subjects:
                     print("All subject(s) has been returned!")
