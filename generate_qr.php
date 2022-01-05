@@ -37,15 +37,26 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
+                    <?php  if(isset($_GET["student"])){ ?>
                     <h1 class="h3 mb-2 text-gray-800">Generate QR Code - <?php echo ucfirst($_GET["firstname"])." ".ucfirst($_GET["lastname"]); ?></h1>
+                    <?php } else { ?>
+                    <h1 class="h3 mb-2 text-gray-800">Generate QR Code - <?php echo ucfirst($_GET["code"])." ".ucfirst($_GET["description"]); ?></h1>
+                    <?php } ?>
                     <p class="mb-4"></p>
                     <div class="card shadow mb-4">
-
+                        <?php if(isset($_GET["student"])){ ?>
                         <div class="card-body">
                             <div id="qrcode"></div>
                             <br>
                             Please save this image. This QR code belongs to <?php echo ucfirst($_GET["firstname"])." ".ucfirst($_GET["lastname"]); ?>. (Download or copy paste the QR code above in Microsoft Word)
                         </div>
+                        <?php } else if(isset($_GET["subject"])){ ?>
+                            <div class="card-body">
+                            <div id="qrcode"></div>
+                            <br>
+                            Please save this image. This QR code belongs to <?php echo ucfirst($_GET["code"])." -  ".ucfirst($_GET["description"]); ?>. (Download or copy paste the QR code above in Microsoft Word)
+                        </div>                            
+                        <?php } ?>
                     </div>
 
                 </div>
@@ -63,12 +74,18 @@
 
         <!-- Generate QR Code -->
         <script src="js/qrcode.min.js"></script>
+
+        <?php if(isset($_GET["student"])){ ?>
         <script type="text/javascript">
             let qrValue = "{\"user\": "+<?php echo $_GET["student"]; ?>+"}"
             new QRCode(document.getElementById("qrcode"), qrValue);
         </script>
-
-
+        <?php } else if(isset($_GET["subject"])){?>
+            <script type="text/javascript">
+            let qrValue = "{\"subject\": "+<?php echo $_GET["subject"]; ?>+"}"
+            new QRCode(document.getElementById("qrcode"), qrValue);
+        </script>
+        <?php } ?>
 
 
         <!-- Bootstrap core JavaScript-->

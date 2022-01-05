@@ -48,6 +48,13 @@
             <i class="fas fa-pencil-ruler"></i>
             <span>Section</span></a>
     </li>    
+
+    <!-- Nav Item - Subjects -->
+    <li class="nav-item">
+    <a class="nav-link" href="subjects.php">
+        <i class="fas fa-book"></i>
+        <span>Subjects</span></a>
+    </li>    
     <?php } ?>
     <!-- Nav Item - Pages Collapse Menu -->
 <!--    <li class="nav-item">-->
