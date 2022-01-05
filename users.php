@@ -200,9 +200,19 @@
                         </div>
                     </div>
                     <!-- Users Table -->
-                    <div class="card shadow mb-4">
+
+                    <?php
+                    $roles =  mysqli_query($mysqli, "SELECT * FROM role");
+                    while($newRole = mysqli_fetch_array($roles)){
+                        $roleId = $newRole["id"];
+                        $users = mysqli_query($mysqli, "SELECT *, u.id AS user_id
+                        FROM users u
+                        JOIN role r
+                        ON r.id = u.role WHERE r.id = '$roleId' " );                        
+                        ?>
+                    <div class="card shadow mb-4" style="display: <?php if($role == 3 AND $newRole["id"] != 2 ) { echo 'none';}?>;">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">List of Users</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">List of Users - <?php echo ucfirst($newRole["code"]); ?></h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -272,6 +282,9 @@
                             </div>
                         </div>
                     </div>
+                    <?php } ?>
+
+
 
                 </div>
                 <!-- /.container-fluid -->
