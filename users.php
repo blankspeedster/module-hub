@@ -142,8 +142,8 @@
                                                 <?php } ?>
                                             </div>
                                             <?php } else { ?>
-                                                <select name="role" class="form-control" disabled>
-                                                    <option value="2" disabled selected>Student</option>
+                                                <select name="role" class="form-control">
+                                                    <option value="2" selected>Student</option>
                                                 </select>
                                             <?php } ?>
                                         </div>
