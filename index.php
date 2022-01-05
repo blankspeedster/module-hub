@@ -43,8 +43,8 @@ include("head.php");
                     <div class="row">
 
                         <div class="col-lg-12 mb-4">
-
-                            <!-- Approach -->
+                            <?php if($_SESSION['role']!=2){ ?>
+                            <!-- Placeholder for Admin -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
@@ -57,6 +57,48 @@ include("head.php");
                                         Bootstrap framework, especially the utility classes.</p>
                                 </div>
                             </div>
+                            <?php } else { ?>
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">STATUS OF YOUR MODULES</h6>
+                                </div>
+                                <div class="card-body">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: center;">Subject</td>
+                                            <th style="text-align: center;">Status</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $userId = $_SESSION['user_id'];
+                                        $subjects = mysqli_query($mysqli, "SELECT *, s.code AS subject_code FROM users u
+                                        JOIN class c
+                                        ON c.user_id = u.id
+                                        JOIN subjects s
+                                        ON c.subject_id = s.id
+                                        WHERE u.id = '$userId' ");                                        
+                                        while ($subject = mysqli_fetch_array($subjects)) {
+                                        ?>
+                                            <tr>
+                                                <td style="text-align: center;"><?php echo strtoupper($subject["subject_code"]); ?></td>
+                                                <td style="text-align: center;">
+                                                    <?php if($subject['returned'] == "0"){ ?>
+                                                    <span class="badge bg-danger text-white">Pending Pickup</span>
+                                                    <?php } else if($subject['returned'] == "-1"){ ?>
+                                                    <span class="badge bg-warning text-white">Pending Submission</span>
+                                                    <?php } else if($subject['returned'] == "1"){ ?>
+                                                    <span class="badge bg-success text-white">Submitted</span>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                                </div>                                    
+                            </div>
+                            <?php } ?>
 
                         </div>
                     </div>
