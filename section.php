@@ -8,8 +8,20 @@ $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $_SESSION['getURI'] = $getURI;
 
 $session_user_id = $_SESSION['user_id'];
-$sections = mysqli_query($mysqli, "SELECT *
-    FROM section");
+$sections = mysqli_query($mysqli, "SELECT * FROM section s JOIN users u ON u.id = s.teacher_id");
+// $sections = mysqli_query($mysqli, "SELECT * FROM section");
+
+$teachers = mysqli_query($mysqli, "SELECT * FROM users WHERE role = '3' ");
+
+$section_id = 0;
+$isEdit = false;
+if(isset($_GET["edit"])){
+    $section_id = $_GET["edit"];
+    $isEdit = true;
+    $editSection = mysqli_query($mysqli, "SELECT * FROM section WHERE id = '$section_id' ");
+    $section = mysqli_fetch_array($editSection);
+}
+
 ?>
 
 <title>Module Hub - Section</title>
@@ -72,7 +84,7 @@ $sections = mysqli_query($mysqli, "SELECT *
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                     Grade Level</div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <input type="number" min="1" max="12" class="form-control" name="grade" required>
+                                                    <input type="number" min="0" max="12" class="form-control" name="grade" value="<?php if($isEdit){echo $section['grade'];} ?>" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -85,7 +97,25 @@ $sections = mysqli_query($mysqli, "SELECT *
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                     Section Name</div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <input type="text" class="form-control" name="section" required>
+                                                    <input type="text" class="form-control" name="section" value="<?php if($isEdit){echo $section['section'];} ?>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Select Teacher -->
+                                    <div class="col-xl-6 col-md-6 mb-4">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Teacher</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <select class="form-control" name="teacher">
+                                                        <?php while($teacher = mysqli_fetch_assoc($teachers)){
+                                                            $teacher_id = $teacher["id"];?>
+                                                        <option value="<?php echo $teacher_id; ?>"><?php echo $teacher["firstname"]." ".$teacher["lastname"]; ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,9 +125,16 @@ $sections = mysqli_query($mysqli, "SELECT *
                                     <div class="col-xl-12 col-md-6 mb-4">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
+                                                <?php if(!$isEdit){ ?>
                                                 <button type="submit" class="btn btn-primary float-right mr-1" name="save_section" id="save">
                                                     <i class="far fa-save"></i> Create Section
                                                 </button>
+                                                <?php } else { ?>
+                                                <input type="text" name="section_id" value="<?php echo $section['id']; ?>" style="visibility: hidden;">
+                                                <button type="submit" class="btn btn-primary float-right mr-1" name="update_section" id="save">
+                                                    <i class="far fa-save"></i> Update Section
+                                                </button>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +154,8 @@ $sections = mysqli_query($mysqli, "SELECT *
                                     <thead>
                                         <tr>
                                             <th>Grade Level</th>
-                                            <th width="40%">Section</th>
+                                            <th width="30%">Section</th>
+                                            <th width="40%">Teacher</th>
                                             <th>Actions</th>
                                             
                                         </tr>
@@ -128,6 +166,7 @@ $sections = mysqli_query($mysqli, "SELECT *
                                             <tr>
                                                 <td><?php echo $section["grade"]; ?></td>
                                                 <td><a href="class.php?section=<?php echo $section["id"]; ?>"><?php echo $section["section"]; ?></a></td>
+                                                <td><?php echo $section["firstname"]." ".$section["lastname"]; ?></td>
                                                 <td>
                                                     <!-- Edit-->
                                                     <a href="section.php?edit=<?php echo $section['id']; ?>" class="btn btn-info btn-sm"><i class="far fa-edit"></i> Edit</a>

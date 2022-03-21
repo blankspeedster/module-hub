@@ -4,10 +4,24 @@
     if(isset($_POST['save_section'])){
         $section= $_POST['section'];
         $grade = ucfirst($_POST['grade']);
+        $teacher = ucfirst($_POST['teacher']);
 
-        $mysqli->query(" INSERT INTO section (grade, section) VALUES('$grade','$section') ") or die ($mysqli->error);
+        $mysqli->query(" INSERT INTO section (grade, section, teacher_id) VALUES('$grade','$section', '$teacher') ") or die ($mysqli->error);
 
         $_SESSION['message'] = "Section: ".$section." Creation Successful!";
+        $_SESSION['msg_type'] = "success";
+        header("location: section.php");
+    }
+
+    if(isset($_POST['update_section'])){
+        $section= $_POST['section'];
+        $grade = ucfirst($_POST['grade']);
+        $teacher = ucfirst($_POST['teacher']);
+        $section_id = $_POST['section_id'];
+
+        $mysqli->query(" UPDATE section SET grade = '$grade', section = '$section', teacher_id = '$teacher' WHERE id = '$section_id' ") or die ($mysqli->error);
+
+        $_SESSION['message'] = "Section: ".$section." update Successful!";
         $_SESSION['msg_type'] = "success";
         header("location: section.php");
     }
