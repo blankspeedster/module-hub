@@ -35,12 +35,20 @@
         User Management
     </div>
 
-    <!-- Nav Item - Users -->
+    <!-- Nav Item - Classes -->
     <li class="nav-item">
         <a class="nav-link" href="classes.php">
             <i class="fas fa-pencil-ruler"></i>
-            <span>Classes</span></a>
-    </li>    
+            <span>Your Classes</span></a>
+    </li>   
+    
+    <!-- Nav Item - Module -->
+    <li class="nav-item">
+        <a class="nav-link" href="modules.php">
+            <i class="fas fa-puzzle-piece"></i>
+            <span>Your Module</span></a>
+    </li>       
+
 
     <!-- Nav Item - Subjects -->
     <li class="nav-item" style="display: none;">

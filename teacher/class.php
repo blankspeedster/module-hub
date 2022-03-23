@@ -20,7 +20,7 @@ JOIN subjects s
 ON c.subject_id = s.id
 JOIN users u
 ON u.id = c.user_id
-WHERE section_id = '$class' ");
+WHERE section_id = '$section_id' ");
 ?>
 
 <title>Module Hub - Section</title>
