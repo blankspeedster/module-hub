@@ -46,6 +46,7 @@ include("head.php");
                         JOIN subjects sbj ON sbj.id = m.subject_id
                         WHERE m.teacher_id = '$session_user_id' AND m.section_id = '$section_id'
                         GROUP BY m.code_unique");
+
                         ?>
                     <div class="row">
                         <div class="col-lg-12 mb-4">
@@ -54,21 +55,45 @@ include("head.php");
                                     <h6 class="m-0 font-weight-bold text-primary"><?php echo $section["grade"]." - ".$section["section"]; ?></h6>
                                 </div>
                                 <div class="card-body">
-                                    <?php while($module = mysqli_fetch_array($modules)){ ?>
-                                    <div class="col-xl-4 col-md-12 mb-4">
-                                        <div class="card border-left-info shadow h-100 py-2">
+                                    <?php while($module = mysqli_fetch_array($modules)){
+                                        $module_unique = $module["code_unique"];
+                                        $subjects = mysqli_query($mysqli,"SELECT * FROM class c
+                                        JOIN subjects s ON s.id = c.subject_id
+                                        WHERE c.section_id = '$section_id'
+                                        GROUP BY c.subject_id ");
+                                        ?>
+
+                                    <div class="col-xl-12 col-md-12 mb-4 card shadow p-2">
+                                        Module Name: <?php echo $module["module_name"]; ?><br>
+                                        Week #: <?php echo $module["count_week"]; ?><br>
+
+                                        <?php while($subject = mysqli_fetch_array($subjects)){
+                                            $subject_id = $subject["subject_id"];
+                                            $count_returned_modules = mysqli_query($mysqli," SELECT *, SUM(m.returned) AS sum_returned, COUNT(m.returned) AS count_returned
+                                            FROM module m
+                                            WHERE m.subject_id = '$subject_id' AND m.code_unique = '$module_unique' ");
+                                            $count_returned_module = mysqli_fetch_array($count_returned_modules);
+                                            $sum_returned = $count_returned_module["sum_returned"];
+                                            $count_returned = $count_returned_module["count_returned"];
+                                            if($sum_returned == 0){
+                                                $ave_returned = 0;
+                                            }else{
+                                                $ave_returned = ($sum_returned / $count_returned) * 100;
+                                            }
+                                            ?>
+                                        <div class="card border-left-info shadow h-100 py-2 mt-2 mb-2">
                                             <div class="card-body">
                                                 <div class="row no-gutters align-items-center">
                                                     <div class="col mr-2">
-                                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Subject Code
+                                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1"><?php echo $subject["code"]; ?>
                                                         </div>
                                                         <div class="row no-gutters align-items-center">
                                                             <div class="col-auto">
-                                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $ave_returned; ?>%</div>
                                                             </div>
                                                             <div class="col">
                                                                 <div class="progress progress-sm mr-2">
-                                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: <?php echo $ave_returned; ?>%" aria-valuenow="<?php echo $ave_returned; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -79,6 +104,8 @@ include("head.php");
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php } ?>
+
                                     </div>
                                     <?php } ?>
                                 </div>
