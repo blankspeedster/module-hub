@@ -38,7 +38,7 @@
         header("location: modules.php");
     }
 
-    // Delete Module
+    // Insert Module
     if(isset($_GET['delete'])){
         $module_unique_code= $_GET['delete'];
         $module_name= $_GET['module_name'];
@@ -48,5 +48,19 @@
         $_SESSION['message'] = $module_name." module has been deleted!";
         $_SESSION['msg_type'] = "danger";
         header("location: modules.php");
-    }    
+    }
+    
+    
+    //Return Module
+    if(isset($_GET['return_subject'])){
+        $subject_id= $_GET['return_subject'];
+        $module_code= $_GET['module_code'];
+        $student_id= $_GET['student_id'];
+
+        $mysqli->query(" UPDATE module SET returned = '1' WHERE code_unique = '$module_code' AND user_id = '$student_id' AND subject_id = '$subject_id'  ") or die ($mysqli->error);
+
+        $_SESSION['message'] = "Module has been returned!";
+        $_SESSION['msg_type'] = "info";
+        header("location: index.php");
+    }
 ?>

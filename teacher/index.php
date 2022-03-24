@@ -89,7 +89,7 @@ include("head.php");
                                                         </div>
                                                         <div class="row no-gutters align-items-center">
                                                             <div class="col-auto">
-                                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo $ave_returned; ?>%</div>
+                                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><?php echo number_format($ave_returned, 2); ?>%</div>
                                                             </div>
                                                             <div class="col">
                                                                 <div class="progress progress-sm mr-2">

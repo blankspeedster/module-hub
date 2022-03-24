@@ -8,7 +8,19 @@ $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $_SESSION['getURI'] = $getURI;
 
 $session_user_id = $_SESSION['user_id'];
-$sections =  mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s JOIN users u ON u.id = s.teacher_id WHERE u.id = '$session_user_id' ");
+$sections = mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s JOIN users u ON u.id = s.teacher_id WHERE s.teacher_id = '$session_user_id' ");
+// $sections = mysqli_query($mysqli, "SELECT * FROM section");
+
+$teachers = mysqli_query($mysqli, "SELECT * FROM users WHERE role = '3' ");
+
+$section_id = 0;
+$isEdit = false;
+if(isset($_GET["edit"])){
+    $section_id = $_GET["edit"];
+    $isEdit = true;
+    $editSection = mysqli_query($mysqli, "SELECT * FROM section WHERE id = '$section_id' ");
+    $section = mysqli_fetch_array($editSection);
+}
 
 ?>
 
@@ -55,25 +67,38 @@ $sections =  mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s 
                     <!-- End Notification -->
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Your Module</h1>
+                    <h1 class="h3 mb-2 text-gray-800">My Class</h1>
                     <p class="mb-4"></p>
                     
-                    <div class="card shadow mb-4" >
+                    <div class="card shadow mb-4" style="display: none;">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add Module</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Add / Edit Section</h6>
                         </div>
                         <div class="card-body">
-                            <form method="post" action="process_module.php">
+                            <form method="post" action="process_section.php">
                                 <div class="row">
+
+                                    <!-- Grade Level -->
+                                    <div class="col-xl-6 col-md-6 mb-4">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Grade Level</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <input type="number" min="0" max="12" class="form-control" name="grade" value="<?php if($isEdit){echo $section['grade'];} ?>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- Section Name -->
                                     <div class="col-xl-6 col-md-6 mb-4">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Module Name</div>
+                                                    Section Name</div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <input type="text" class="form-control" name="module_name" value=" " required>
+                                                    <input type="text" class="form-control" name="section" value="<?php if($isEdit){echo $section['section'];} ?>" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,12 +109,12 @@ $sections =  mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s 
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Grade and Section to be added</div>
+                                                    Teacher</div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <select class="form-control" name="section">
-                                                        <?php while($section = mysqli_fetch_assoc($sections)){
-                                                            $section_id = $section["section_id"];?>
-                                                        <option value="<?php echo $section_id; ?>"><?php echo $section["grade"]." - ".$section["section"]; ?></option>
+                                                    <select class="form-control" name="teacher">
+                                                        <?php while($teacher = mysqli_fetch_assoc($teachers)){
+                                                            $teacher_id = $teacher["id"];?>
+                                                        <option value="<?php echo $teacher_id; ?>"><?php echo $teacher["firstname"]." ".$teacher["lastname"]; ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -101,10 +126,16 @@ $sections =  mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s 
                                     <div class="col-xl-12 col-md-6 mb-4">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <input type="text" value="<?php echo $session_user_id; ?>" style="visibility: hidden;" name="teacher_id"> 
-                                                <button type="submit" class="btn btn-primary float-right mr-1" name="insert_module" id="save">
-                                                    <i class="far fa-save"></i> Insert Module
+                                                <?php if(!$isEdit){ ?>
+                                                <button type="submit" class="btn btn-primary float-right mr-1" name="save_section" id="save">
+                                                    <i class="far fa-save"></i> Create Section
                                                 </button>
+                                                <?php } else { ?>
+                                                <input type="text" name="section_id" value="<?php echo $section['id']; ?>" style="visibility: hidden;">
+                                                <button type="submit" class="btn btn-primary float-right mr-1" name="update_section" id="save">
+                                                    <i class="far fa-save"></i> Update Section
+                                                </button>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -116,47 +147,26 @@ $sections =  mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s 
                     <!-- Users Table -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">List of modules (week count) and section</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">List of Grade and Sections</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Module Name</th>
-                                            <th>Week Count</th>
-                                            <th>Grade</th>
-                                            <th>Section</th>
-                                            <th>Actions</th>
+                                            <th>Grade Level</th>
+                                            <th width="30%">Section</th>
+                                            <th width="40%">Teacher</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        $modules =  mysqli_query($mysqli, "SELECT * FROM module m
-                                        JOIN users u ON u.id = m.user_id
-                                        JOIN section s ON s.id = m.section_id
-                                        JOIN subjects sbj ON sbj.id = m.subject_id
-                                        WHERE m.teacher_id = '$session_user_id'
-                                        GROUP BY m.code_unique");
-                                        while ($module = mysqli_fetch_array($modules)) {
+                                        <?php while ($section = mysqli_fetch_array($sections)) {
                                         ?>
                                             <tr>
-                                                <td><?php echo $module["module_name"]; ?></td>
-                                                <td><?php echo $module["count_week"]; ?></td>
-                                                <td><?php echo $module["grade"]; ?></td>
-                                                <td><?php echo $module["section"]; ?></td>
-                                                <td>
-                                                    <!-- Start Drop down Delete here -->
-                                                    <button class="btn btn-danger btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <i class="far fa-trash-alt"></i> Delete
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton btn-sm">
-                                                        You sure you want to delete? You cannot undo the changes<br />
-                                                        <a href="#" class='btn btn-success btn-sm'><i class="far fa-window-close"></i> Cancel</a>
-                                                        <a href="process_module.php?delete=<?php echo $module['code_unique']; ?>&module_name=<?php echo $module['module_name']; ?>" class='btn btn-danger btn-sm'><i class="far fa-trash-alt"></i> Confirm Delete</a>
-                                                    </div>
-                                                </td>
+                                                <td><?php echo $section["grade"]; ?></td>
+                                                <td><a href="class.php?section=<?php echo $section["section_id"]; ?>"><?php echo $section["section"]; ?></a></td>
+                                                <td><?php echo $section["firstname"]." ".$section["lastname"]; ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

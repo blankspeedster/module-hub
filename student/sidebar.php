@@ -1,18 +1,9 @@
 <?php
-    include('dbh.php');
+    include('../dbh.php');
 
     if(!isset($_SESSION['email'])){
         header("Location: login.php");
     }
-
-    if($_SESSION['role']==3){
-        header("location: ./teacher/index.php");
-    }
-
-    if($_SESSION['role']==2){
-        header("location: ./student/index.php");
-    }
-
 ?>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -44,22 +35,23 @@
         User Management
     </div>
 
-    <!-- Nav Item - Users -->
+    <!-- Nav Item - Classes -->
     <li class="nav-item">
-        <a class="nav-link" href="users.php">
-            <i class="fas fa-fw fa-user"></i>
-            <span>Users</span></a>
-    </li>
-
-    <!-- Nav Item - Users -->
-    <li class="nav-item">
-        <a class="nav-link" href="section.php">
+        <a class="nav-link" href="classes.php">
             <i class="fas fa-pencil-ruler"></i>
-            <span>Section</span></a>
-    </li>    
+            <span>Your Classes</span></a>
+    </li>   
+    
+    <!-- Nav Item - Module -->
+    <li class="nav-item">
+        <a class="nav-link" href="modules.php">
+            <i class="fas fa-puzzle-piece"></i>
+            <span>Your Module</span></a>
+    </li>       
+
 
     <!-- Nav Item - Subjects -->
-    <li class="nav-item">
+    <li class="nav-item" style="display: none;">
     <a class="nav-link" href="subjects.php">
         <i class="fas fa-book"></i>
         <span>Subjects</span></a>
