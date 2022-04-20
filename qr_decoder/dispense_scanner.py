@@ -4,11 +4,17 @@ import numpy as np
 from pyzbar.pyzbar import decode
 from time import sleep
 import json
+import RPi.GPIO as GPIO
 
 currentID = 0 
 
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(23, GPIO.OUT)
+GPIO.output(23, GPIO.LOW)
+
 mydb = mysql.connector.connect(
-        host="localhost",
+        host="192.168.100.22",
         user="modulehub_database",
         passwd="modulehub_database",
         database="modulehub_database"
@@ -21,7 +27,6 @@ def decoder(image):
     gray_img = cv2.cvtColor(image,0)
     barcode = decode(gray_img)
 
-    
     for obj in barcode:
         print('Please Wait... ')
         sleep(2)
@@ -46,17 +51,22 @@ def decoder(image):
             else:
                 print(str.capitalize(result["firstname"])+" "+str.capitalize(result["lastname"]))
                 mycursor.execute(f''' SELECT * FROM users u
-                                JOIN class c
-                                ON c.user_id = u.id
-                                WHERE c.returned = "0" AND u.id = {currentID}
+                                JOIN module m
+                                ON m.user_id = u.id
+                                WHERE m.returned = 0 AND u.id = {currentID}
                                 LIMIT 1 ''')
                 subjects = mycursor.fetchall()
                 if not subjects:
                     print("Student has received the modules already.")
                 else:
-                    updateStatus = f'''UPDATE class SET returned = '-1' WHERE user_id = {currentID} '''
+                    updateStatus = f'''UPDATE module SET returned = '-1' WHERE user_id = {currentID} '''
                     mycursor.execute(updateStatus)
                     mydb.commit()
+                    
+                    GPIO.output(23, GPIO.HIGH)
+                    sleep(5)
+                    GPIO.output(23, GPIO.LOW)
+
                     print("Modules has been dispensed. Please tap another QR code for dispensing.")
         else:
             print("Invalid QR code")      
