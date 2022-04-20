@@ -3,12 +3,14 @@ import cv2
 import numpy as np
 from pyzbar.pyzbar import decode
 from time import sleep
+import time
 import json
 import threading as th
 import RPi.GPIO as GPIO
 
 currentID = 0
 isScan = True
+
 mydb = mysql.connector.connect(
         host="192.168.100.22",
         user="modulehub_database",
@@ -41,6 +43,177 @@ def isScanSetTrue():
     global isScan
     isScan = True
     print("You can put the module now")
+
+def stepper(angleValue):
+    print("Pushing Stepper")
+    # setting in for gpio stepper
+    out1 = 5
+    out2 = 6
+    out3 = 13
+    out4 = 12
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(out1,GPIO.OUT)
+    GPIO.setup(out2,GPIO.OUT)
+    GPIO.setup(out3,GPIO.OUT)
+    GPIO.setup(out4,GPIO.OUT)
+
+    i=0
+    positive=0
+    negative=0
+    y=0
+
+    GPIO.output(out1,GPIO.LOW)
+    GPIO.output(out2,GPIO.LOW)
+    GPIO.output(out3,GPIO.LOW)
+    GPIO.output(out4,GPIO.LOW)
+    x = int(angleValue)
+    if x > 0 and x <= 400:
+        for y in range(x,0,-1):
+            if negative==1:
+                if i==7:
+                    i=0
+                else:
+                    i=i+1
+                y=y+2
+                negative=0
+            positive=1
+            #print((x+1)-y)
+            if i==0:
+                GPIO.output(out1,GPIO.HIGH)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==1:
+                GPIO.output(out1,GPIO.HIGH)
+                GPIO.output(out2,GPIO.HIGH)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==2:  
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.HIGH)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==3:    
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.HIGH)
+                GPIO.output(out3,GPIO.HIGH)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==4:  
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.HIGH)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==5:
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.HIGH)
+                GPIO.output(out4,GPIO.HIGH)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==6:    
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.HIGH)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==7:    
+                GPIO.output(out1,GPIO.HIGH)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.HIGH)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            if i==7:
+                i=0
+                continue
+            i=i+1
+    
+    
+    elif x<0 and x>=-400:
+        x=x*-1
+        for y in range(x,0,-1):
+            if positive==1:
+                if i==0:
+                    i=7
+                else:
+                    i=i-1
+                y=y+3
+                positive=0
+            negative=1
+            #print((x+1)-y) 
+            if i==0:
+                GPIO.output(out1,GPIO.HIGH)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==1:
+                GPIO.output(out1,GPIO.HIGH)
+                GPIO.output(out2,GPIO.HIGH)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==2:  
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.HIGH)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==3:    
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.HIGH)
+                GPIO.output(out3,GPIO.HIGH)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==4:  
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.HIGH)
+                GPIO.output(out4,GPIO.LOW)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==5:
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.HIGH)
+                GPIO.output(out4,GPIO.HIGH)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==6:    
+                GPIO.output(out1,GPIO.LOW)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.HIGH)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            elif i==7:    
+                GPIO.output(out1,GPIO.HIGH)
+                GPIO.output(out2,GPIO.LOW)
+                GPIO.output(out3,GPIO.LOW)
+                GPIO.output(out4,GPIO.HIGH)
+                time.sleep(0.03)
+                #time.sleep(0.03)
+            if i==0:
+                i=7
+                continue
+            i=i-1
+    GPIO.cleanup()
 
 print('Scan QR to start')
 
@@ -90,41 +263,46 @@ def decoder(image):
             # mycursor.execute(updateStatus)
             # mydb.commit()
 
+            # Start Stepper here
+            # stepper(120)
+            if subjectID == 1:
+                # math
+                stepper(30)
+            if subjectID == 2:
+                # science
+                stepper(60)
+            if subjectID == 3:
+                stepper(90)   
+            if subjectID == 4:
+                stepper(120)    
+            GPIO.cleanup()
+            sleep(1)
+            # End Stepper here
+
+
             # For Servo Motor here
-            GPIO.setmode(GPIO.BOARD)
+            GPIO.setmode(GPIO.BCM)
             GPIO.setwarnings(False)
-            GPIO.setup(23, GPIO.OUT)
-            pwm = GPIO.PWM(23, 50)
+            GPIO.setup(27, GPIO.OUT)
+            pwm = GPIO.PWM(27, 50)
             pwm.start(0)
 
             def SetAngle(angle):
                 duty = angle / 18 + 2
-                GPIO.output(23, True)
+                GPIO.output(27, True)
                 pwm.ChangeDutyCycle(duty)
                 sleep(1)
-                GPIO.output(23, False)   
+                GPIO.output(27, False)   
                 pwm.ChangeDutyCycle(0)
 
-
+            SetAngle(0)
+            sleep(2)
             SetAngle(90)
+            sleep(0)
             pwm.stop()
             GPIO.cleanup()
 
             #End Servo motor here
-
-            # Start Stepper here
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setwarnings(False)
-            GPIO.setup(18, GPIO.OUT)
-            GPIO.output(18, GPIO.LOW)
-
-            GPIO.output(18, GPIO.HIGH)
-            sleep(5)
-            GPIO.output(18, GPIO.LOW)
-
-            pwm.stop()
-            GPIO.cleanup()
-            # End Stepper here
 
             mycursor.execute(f'''SELECT *, u.id as user_id FROM module m
                                 JOIN subjects s ON s.id = m.subject_id
