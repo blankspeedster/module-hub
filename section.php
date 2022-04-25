@@ -8,7 +8,7 @@ $getURI = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $_SESSION['getURI'] = $getURI;
 
 $session_user_id = $_SESSION['user_id'];
-$sections = mysqli_query($mysqli, "SELECT * FROM section s JOIN users u ON u.id = s.teacher_id");
+$sections = mysqli_query($mysqli, "SELECT *, s.id AS section_id FROM section s JOIN users u ON u.id = s.teacher_id");
 // $sections = mysqli_query($mysqli, "SELECT * FROM section");
 
 $teachers = mysqli_query($mysqli, "SELECT * FROM users WHERE role = '3' ");
@@ -165,7 +165,8 @@ if(isset($_GET["edit"])){
                                         ?>
                                             <tr>
                                                 <td><?php echo $section["grade"]; ?></td>
-                                                <td><a href="class.php?section=<?php echo $section["id"]; ?>"><?php echo $section["section"]; ?></a></td>
+                                                <!-- <td><a href="class.php?section=<?php echo $section["id"]; ?>"><?php echo $section["section"]; ?></a></td> -->
+                                                <td><?php echo $section["section"]; ?></td>
                                                 <td><?php echo $section["firstname"]." ".$section["lastname"]; ?></td>
                                                 <td>
                                                     <!-- Edit-->
@@ -177,7 +178,7 @@ if(isset($_GET["edit"])){
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton btn-sm">
                                                         You sure you want to delete? You cannot undo the changes<br />
                                                         <a href="#" class='btn btn-success btn-sm'><i class="far fa-window-close"></i> Cancel</a>
-                                                        <a href="process_section.php?delete=<?php echo $section['id'] ?>" class='btn btn-danger btn-sm'><i class="far fa-trash-alt"></i> Confirm Delete</a>
+                                                        <a href="process_section.php?delete=<?php echo $section['section_id'] ?>" class='btn btn-danger btn-sm'><i class="far fa-trash-alt"></i> Confirm Delete</a>
                                                     </div>
                                                 </td>
                                             </tr>

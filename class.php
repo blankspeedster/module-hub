@@ -21,6 +21,7 @@ ON c.subject_id = s.id
 JOIN users u
 ON u.id = c.user_id
 WHERE section_id = '$class' ");
+
 ?>
 
 <title>Module Hub - Section</title>
@@ -154,7 +155,7 @@ WHERE section_id = '$class' ");
 
                     <!-- Section Tables -->
                     <?php
-                        $subjects = mysqli_query($mysqli, " SELECT * FROM subjects");
+                        $subjects = mysqli_query($mysqli, " SELECT * FROM subjects ");
                         while($subject = mysqli_fetch_array($subjects)){
                     ?>
                     <div class="card shadow mb-4">

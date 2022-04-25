@@ -26,6 +26,7 @@
         header("location: section.php");
     }
 
+    //Associate Teacher
     if(isset($_POST['associate_user'])){
         $section_id= $_POST['section_id'];
         $user_id = ucfirst($_POST['user_id']);
@@ -46,5 +47,16 @@
         $_SESSION['message'] = "Student association successful!";
         $_SESSION['msg_type'] = "success";
         header("location: class.php?section=".$section_id);
+    }
+
+    // Delete user
+    if(isset($_GET['delete'])){
+        $section_id= $_GET['delete'];
+        
+        mysqli_query($mysqli, "DELETE FROM section WHERE id = '$section_id' ") or die($mysqli->error);
+
+        $_SESSION['message'] = "Section has been deleted!";
+        $_SESSION['msg_type'] = "warning";
+        header("location: section.php");
     }
 ?>

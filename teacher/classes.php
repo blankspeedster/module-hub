@@ -165,7 +165,7 @@ if(isset($_GET["edit"])){
                                         ?>
                                             <tr>
                                                 <td><?php echo $section["grade"]; ?></td>
-                                                <td><a href="class.php?section=<?php echo $section["section_id"]; ?>"><?php echo $section["section"]; ?></a></td>
+                                                <td><a href="class.php?section=<?php echo $section["section_id"]."&grade=".$section["grade"]; ?>"><?php echo $section["section"]; ?></a></td>
                                                 <td><?php echo $section["firstname"]." ".$section["lastname"]; ?></td>
                                             </tr>
                                         <?php } ?>

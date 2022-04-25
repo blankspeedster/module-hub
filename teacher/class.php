@@ -12,6 +12,10 @@ $section_id = 0;
 if (isset($_GET['section'])) {
     $class = $_GET['section'];
     $section_id = $_GET['section'];
+
+    $section_grade = mysqli_query($mysqli, "SELECT * FROM section WHERE id = '$section_id' ");
+    $section = mysqli_fetch_array($section_grade);
+    $grade_level = $section['grade'];
 } else {
     header("location: section.php");
 }
@@ -21,6 +25,7 @@ ON c.subject_id = s.id
 JOIN users u
 ON u.id = c.user_id
 WHERE section_id = '$section_id' ");
+
 ?>
 
 <title>Module Hub - Section</title>
@@ -154,7 +159,7 @@ WHERE section_id = '$section_id' ");
 
                     <!-- Section Tables -->
                     <?php
-                        $subjects = mysqli_query($mysqli, " SELECT * FROM subjects");
+                        $subjects = mysqli_query($mysqli, " SELECT * FROM subjects WHERE grade = '$grade_level' ");
                         while($subject = mysqli_fetch_array($subjects)){
                     ?>
                     <div class="card shadow mb-4">
@@ -202,21 +207,21 @@ WHERE section_id = '$section_id' ");
 
             <!-- Start scripts here -->
             <!-- Bootstrap core JavaScript-->
-            <script src="vendor/jquery/jquery.min.js"></script>
-            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="../vendor/jquery/jquery.min.js"></script>
+            <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
             <!-- Core plugin JavaScript-->
-            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+            <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
             <!-- Custom scripts for all pages-->
-            <script src="js/sb-admin-2.min.js"></script>
+            <script src="../js/sb-admin-2.min.js"></script>
 
             <!-- Page level plugins -->
-            <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-            <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+            <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+            <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
             <!-- Page level custom scripts -->
-            <script src="js/demo/datatables-demo.js"></script>
+            <script src="../js/demo/datatables-demo.js"></script>
 
             <!-- End scripts here -->
 </body>
